@@ -6,11 +6,16 @@
 [![GitHub forks](https://img.shields.io/github/forks/Xdluomingxian/xinling-card)](https://github.com/Xdluomingxian/xinling-card/network)
 [![GitHub license](https://img.shields.io/github/license/Xdluomingxian/xinling-card)](https://github.com/Xdluomingxian/xinling-card/blob/main/LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-green.svg)](https://fastapi.tiangolo.com/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-green.svg)](https://fastapi.tiangolo.com)
+[![Deploy](https://github.com/Xdluomingxian/xinling-card/actions/workflows/pages.yml/badge.svg)](https://github.com/Xdluomingxian/xinling-card/actions/workflows/pages.yml)
 
 ---
 
-**🌐 在线体验**: [https://github.com/Xdluomingxian/xinling-card](https://github.com/Xdluomingxian/xinling-card)
+**🌐 在线体验**: 
+- **前端页面**: `https://Xdluomingxian.github.io/xinling-card/`（需配置 API 地址）
+- **API 文档**: `http://localhost:8000/docs`（本地运行）
+
+**📦 快速开始**: [QUICKSTART.md](QUICKSTART.md)
 
 ---
 
