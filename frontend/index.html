@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心灵卡片 - 用经典智慧为你提供情绪价值</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .card-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .loading {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- 顶部导航 -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl">💡</span>
+                    <h1 class="text-xl font-bold text-gray-800">心灵卡片</h1>
+                </div>
+                <div class="text-sm text-gray-500">用经典智慧，为你赋能</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <!-- 输入区域 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">告诉我你现在的状态</h2>
+            
+            <textarea 
+                id="userInput" 
+                rows="4" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                placeholder="例如：最近工作压力很大，感觉很累，想要放弃...&#10;或者：今天项目成功了，团队都很兴奋..."
+            ></textarea>
+            
+            <div class="mt-4 flex flex-col sm:flex-row gap-4">
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">语录来源</label>
+                    <select id="quoteSource" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <option value="mao">毛泽东选集</option>
+                        <option value="all">全部</option>
+                    </select>
+                </div>
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">情绪类型（可选）</label>
+                    <select id="emotionOverride" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <option value="">自动识别</option>
+                        <option value="低谷鼓励">低谷鼓励</option>
+                        <option value="得意提醒">得意提醒</option>
+                        <option value="迷茫指引">迷茫指引</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button 
+                onclick="generateCard()" 
+                class="mt-6 w-full card-gradient text-white py-3 px-6 rounded-lg font-semibold hover:opacity-90 transition-opacity flex items-center justify-center space-x-2"
+            >
+                <span>生成心灵卡片</span>
+                <span>✨</span>
+            </button>
+        </div>
+
+        <!-- 加载状态 -->
+        <div id="loading" class="hidden">
+            <div class="flex flex-col items-center justify-center py-12">
+                <div class="loading mb-4"></div>
+                <p class="text-gray-600">正在为你寻找智慧...</p>
+            </div>
+        </div>
+
+        <!-- 卡片展示 -->
+        <div id="cardDisplay" class="hidden">
+            <div class="card-gradient card-shadow rounded-xl p-8 text-white fade-in">
+                <!-- 情绪标签 -->
+                <div class="flex items-center space-x-2 mb-6">
+                    <span id="emotionBadge" class="px-3 py-1 bg-white/20 rounded-full text-sm">低谷鼓励</span>
+                    <span id="confidenceBadge" class="px-3 py-1 bg-white/20 rounded-full text-sm">置信度 85%</span>
+                </div>
+                
+                <!-- 名言原文 -->
+                <div class="mb-6">
+                    <p id="quoteText" class="text-2xl font-bold leading-relaxed mb-3">
+                        "星星之火，可以燎原。"
+                    </p>
+                    <p id="quoteSource" class="text-white/80 text-right">
+                        —— 《星星之火，可以燎原》
+                    </p>
+                </div>
+                
+                <!-- 分隔线 -->
+                <div class="border-t border-white/30 my-6"></div>
+                
+                <!-- AI 解读 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-2 flex items-center">
+                        <span>💡</span>
+                        <span class="ml-2">智慧解读</span>
+                    </h3>
+                    <p id="interpretation" class="text-white/90 leading-relaxed">
+                        即使现在力量微小，只要方向正确，坚持下去就能成就大事。
+                    </p>
+                </div>
+                
+                <!-- 行动建议 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-2 flex items-center">
+                        <span>🎯</span>
+                        <span class="ml-2">行动建议</span>
+                    </h3>
+                    <p id="action" class="text-white/90 leading-relaxed">
+                        相信自己的选择，继续前行，不要因暂时的弱小而气馁。
+                    </p>
+                </div>
+                
+                <!-- 标签 -->
+                <div id="tags" class="flex flex-wrap gap-2 mb-6">
+                    <span class="px-3 py-1 bg-white/20 rounded-full text-sm">希望</span>
+                    <span class="px-3 py-1 bg-white/20 rounded-full text-sm">坚持</span>
+                    <span class="px-3 py-1 bg-white/20 rounded-full text-sm">信念</span>
+                </div>
+                
+                <!-- 底部操作 -->
+                <div class="flex flex-wrap gap-3 pt-4 border-t border-white/30">
+                    <button onclick="generateCard()" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors flex items-center space-x-1">
+                        <span>🔄</span>
+                        <span>再来一张</span>
+                    </button>
+                    <button onclick="shareCard()" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors flex items-center space-x-1">
+                        <span>📤</span>
+                        <span>分享</span>
+                    </button>
+                    <button onclick="copyCard()" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors flex items-center space-x-1">
+                        <span>📋</span>
+                        <span>复制</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 使用说明 -->
+        <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">💡 使用说明</h3>
+            <div class="space-y-3 text-gray-600">
+                <div class="flex items-start space-x-3">
+                    <span class="text-purple-600 font-bold">1.</span>
+                    <p>在上方输入你当前的心理状态或情绪感受</p>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <span class="text-purple-600 font-bold">2.</span>
+                    <p>AI 会自动分析你的情绪，并从经典著作中匹配最合适的智慧</p>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <span class="text-purple-600 font-bold">3.</span>
+                    <p>获得专属的心灵卡片，包含名言、解读和行动建议</p>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <span class="text-purple-600 font-bold">4.</span>
+                    <p>可以分享或保存卡片，在需要时重温这份力量</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 情绪类型说明 -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <div class="text-2xl mb-2">🌱</div>
+                <h4 class="font-semibold text-gray-800 mb-2">低谷鼓励</h4>
+                <p class="text-sm text-gray-600">当你感到失落、沮丧、迷茫时，给你力量和希望</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <div class="text-2xl mb-2">⚠️</div>
+                <h4 class="font-semibold text-gray-800 mb-2">得意提醒</h4>
+                <p class="text-sm text-gray-600">当你取得成功、顺风顺水时，提醒你保持谦逊</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <div class="text-2xl mb-2">🧭</div>
+                <h4 class="font-semibold text-gray-800 mb-2">迷茫指引</h4>
+                <p class="text-sm text-gray-600">当你迷失方向、不知如何选择时，给你指引</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white border-t mt-12">
+        <div class="max-w-4xl mx-auto px-4 py-6">
+            <div class="text-center text-gray-600 text-sm">
+                <p>💡 心灵卡片 - 用经典著作的智慧，为你提供情绪价值</p>
+                <p class="mt-2">当前内容来源：毛泽东选集 | 更多著作敬请期待</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // API 基础 URL
+        const API_BASE = 'http://localhost:8000';
+        
+        // 当前卡片数据
+        let currentCard = null;
+        let currentEmotion = null;
+
+        // 生成卡片
+        async function generateCard() {
+            const userInput = document.getElementById('userInput').value.trim();
+            
+            if (!userInput) {
+                alert('请先输入你的心理状态~');
+                return;
+            }
+
+            // 显示加载状态
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('cardDisplay').classList.add('hidden');
+
+            try {
+                const response = await fetch(`${API_BASE}/card`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_input: userInput,
+                        quote_source: document.getElementById('quoteSource').value,
+                        emotion_override: document.getElementById('emotionOverride').value || null
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('生成失败，请稍后重试');
+                }
+
+                const data = await response.json();
+                
+                // 保存当前数据
+                currentCard = data.card;
+                currentEmotion = data.emotion;
+
+                // 更新 UI
+                updateCardDisplay(data);
+
+                // 隐藏加载，显示卡片
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('cardDisplay').classList.remove('hidden');
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('生成失败：' + error.message);
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+
+        // 更新卡片显示
+        function updateCardDisplay(data) {
+            // 情绪标签
+            document.getElementById('emotionBadge').textContent = data.emotion.emotion;
+            document.getElementById('confidenceBadge').textContent = `置信度 ${Math.round(data.emotion.confidence * 100)}%`;
+
+            // 卡片内容
+            document.getElementById('quoteText').textContent = `"${data.card.quote_text}"`;
+            document.getElementById('quoteSource').textContent = `—— ${data.card.quote_source}`;
+            document.getElementById('interpretation').textContent = data.card.interpretation;
+            document.getElementById('action').textContent = data.card.action;
+
+            // 标签
+            const tagsContainer = document.getElementById('tags');
+            tagsContainer.innerHTML = '';
+            data.card.tags.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'px-3 py-1 bg-white/20 rounded-full text-sm';
+                span.textContent = tag;
+                tagsContainer.appendChild(span);
+            });
+        }
+
+        // 分享卡片
+        function shareCard() {
+            if (!currentCard) return;
+
+            const shareText = `💡 心灵卡片\n\n"${currentCard.quote_text}"\n—— ${currentCard.quote_source}\n\n${currentCard.interpretation}\n\n行动建议：${currentCard.action}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '心灵卡片',
+                    text: shareText
+                });
+            } else {
+                copyToClipboard(shareText);
+                alert('已复制到剪贴板，可以粘贴分享了~');
+            }
+        }
+
+        // 复制卡片
+        function copyCard() {
+            if (!currentCard) return;
+
+            const copyText = `💡 心灵卡片\n\n"${currentCard.quote_text}"\n—— ${currentCard.quote_source}\n\n${currentCard.interpretation}\n\n行动建议：${currentCard.action}`;
+            copyToClipboard(copyText);
+            alert('已复制到剪贴板~');
+        }
+
+        // 复制到剪贴板
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text);
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+        }
+
+        // 回车提交
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                generateCard();
+            }
+        });
+    </script>
+</body>
+</html>
