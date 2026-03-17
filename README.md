@@ -2,6 +2,16 @@
 
 **用经典著作的智慧，为你提供情绪价值和人生指引**
 
+[![GitHub stars](https://img.shields.io/github/stars/Xdluomingxian/xinling-card)](https://github.com/Xdluomingxian/xinling-card/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Xdluomingxian/xinling-card)](https://github.com/Xdluomingxian/xinling-card/network)
+[![GitHub license](https://img.shields.io/github/license/Xdluomingxian/xinling-card)](https://github.com/Xdluomingxian/xinling-card/blob/main/LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-green.svg)](https://fastapi.tiangolo.com/)
+
+---
+
+**🌐 在线体验**: [https://github.com/Xdluomingxian/xinling-card](https://github.com/Xdluomingxian/xinling-card)
+
 ---
 
 ## 🌟 项目简介
