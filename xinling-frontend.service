@@ -1,0 +1,15 @@
+[Unit]
+Description=心灵卡片 - 前端服务
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/projects/xinling-card/frontend
+ExecStart=/usr/bin/python3 -m http.server 8080
+Restart=always
+StandardOutput=append:/var/log/xinling-frontend.log
+StandardError=append:/var/log/xinling-frontend.log
+
+[Install]
+WantedBy=multi-user.target
